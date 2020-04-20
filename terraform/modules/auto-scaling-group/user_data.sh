@@ -1,7 +1,7 @@
 #!/bin/bash -xe
 yum update -y
 yum install httpd php awslogs -y
-wget https://raw.githubusercontent.com/tracer-tick/Abusing-AWS-IMDS-v1/master/terraform/misc/awslogs.conf
+wget https://raw.githubusercontent.com/tracer-tick/Abusing-AWS-IMDS-v1/master/misc/awslogs.conf
 mv awslogs.conf /etc/awslogs/
 systemctl start awslogsd
 cd /var/www/html
