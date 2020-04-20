@@ -41,7 +41,7 @@ resource "aws_launch_configuration" "as_conf" {
 }
 
 # Instance Profile
-resource "aws_iam_role" "s3_read_only" {
+resource "aws_iam_role" "s3_read_only_and_cwl" {
   name               = "s3_read_only"
   assume_role_policy = <<EOF
 {
@@ -60,9 +60,9 @@ resource "aws_iam_role" "s3_read_only" {
 EOF
 }
 
-resource "aws_iam_policy" "s3_read_only" {
-  name        = "s3-read-only"
-  description = "Allows all head, list, and get options for S3"
+resource "aws_iam_policy" "s3_read_only_and_cwl" {
+  name        = "s3-read-only-and-cwl"
+  description = "Allows all head, list, and get options for S3 and cwl actions"
 
   policy = <<EOF
 {
@@ -72,7 +72,11 @@ resource "aws_iam_policy" "s3_read_only" {
       "Action": [
         "s3:Get*",
         "s3:Head*",
-        "s3:List*"
+        "s3:List*",
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents",
+        "logs:DescribeLogStreams"
       ],
       "Effect": "Allow",
       "Resource": "*"
@@ -83,11 +87,11 @@ EOF
 }
 
 resource "aws_iam_instance_profile" "instance_profile" {
-  name = "assume_role"
-  role = aws_iam_role.s3_read_only.name
+  name = "s3-read-and-cwl"
+  role = aws_iam_role.s3_read_only_and_cwl.name
 }
 
-resource "aws_iam_role_policy_attachment" "s3_read_only_attach" {
-  role       = aws_iam_role.s3_read_only.name
-  policy_arn = aws_iam_policy.s3_read_only.arn
+resource "aws_iam_role_policy_attachment" "role_attach" {
+  role       = aws_iam_role.s3_read_only_and_cwl.name
+  policy_arn = aws_iam_policy.s3_read_only_and_cwl.arn
 }
