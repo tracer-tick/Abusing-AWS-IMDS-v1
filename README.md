@@ -1,1 +1,4 @@
-# terraform-abusing-IMDS-v1
+# Overview
+ The AWS Instance Metadata Service (IMDS) provides contextual data about your instance that can be used to configure or manage the running instance. If we assume that an instance will be compromised eventually, given an attacker with unlimited time and money, a logical question to ask would be: what could an attacker do with this service? And who's responsible for the security of the IMDS - Amazon or the customer?
+
+I had the opportunity to speak and present about the IMDS, specifically from an attacker perspective. I gave a demonstration in which I performed a Server Side Request Forgery (SSRF) attack to gain access to the IMDS running locally on an instance. I was then able to exfiltrate temporary credentials from the IMDS, authenticate using these credentials, and further perform my attack.
