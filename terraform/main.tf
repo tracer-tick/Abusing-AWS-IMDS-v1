@@ -10,8 +10,7 @@ provider "aws" {
 # Variables
 #####################################
 variable "my_ip" {
-  type    = string
-  default = "99.44.98.252/32" #update this value
+  type = string
 }
 
 #####################################
