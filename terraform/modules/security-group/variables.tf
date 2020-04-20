@@ -1,8 +1,15 @@
-variable "name" {
+variable "name-ec2" {
   type        = string
-  default     = "public_access"
+  default     = "ec2"
   description = "The name of the security group where the web server will be hosted"
 }
+
+variable "name-alb" {
+  type        = string
+  default     = "alb"
+  description = "The name of the security group where the web server will be hosted"
+}
+
 
 variable "locked-down-ip-addresses" {
   type        = list(string)

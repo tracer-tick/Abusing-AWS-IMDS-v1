@@ -26,12 +26,21 @@ module "create-vpc" {
 }
 
 module "create-security-group" {
-  source = ".//modules//security-group"
-  name   = "public-web-app"
-  vpc_id = module.create-vpc.vpc-id
+  source    = ".//modules//security-group"
+  name-ec2  = "public-web-app"
+  name-alb  = "alb"
+  vpc_id    = module.create-vpc.vpc-id
   locked-down-ip-addresses = [ #update this value
     "99.44.98.252/32",
   ]
+}
+
+module "create-application-load-balancer" {
+  source              = ".//modules//application-load-balancer"
+  public_subnet_ids   = module.create-vpc.subnets
+  security_group_id   = module.create-security-group.alb-security-group-id
+  vpc_id              = module.create-vpc.vpc-id
+  instance_id         = module.create-vulnerable-web-app.ec2_instance_id
 }
 
 module "create-vulnerable-web-app" {
@@ -46,7 +55,10 @@ module "create-vulnerable-web-app" {
 #####################################
 # Outputs
 #####################################
-
 output "ec2_public_dns" {
   value = module.create-vulnerable-web-app.public_dns
+}
+
+output "alb_public_dns" {
+  value = module.create-application-load-balancer.public_dns
 }
