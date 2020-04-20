@@ -4,7 +4,6 @@
 
 # Resources #
 resource "aws_vpc" "vpc" {
-
   cidr_block           = var.vpc_cidr_block
   enable_dns_hostnames = true
   enable_dns_support   = true
@@ -16,7 +15,6 @@ resource "aws_vpc" "vpc" {
 
 resource "aws_subnet" "public_subnet" {
   count = 2
-  #hard-coded value for now
 
   vpc_id                  = aws_vpc.vpc.id
   cidr_block              = cidrsubnet(var.vpc_cidr_block, 8, count.index)
@@ -25,8 +23,7 @@ resource "aws_subnet" "public_subnet" {
 
   tags = {
     name = "public-subnet-${count.index + 1}",
-    #adding 1 to make human-readable
-    vpc = var.vpc_name,
+    vpc  = var.vpc_name,
   }
 }
 
@@ -55,7 +52,6 @@ resource "aws_main_route_table_association" "main_rt" {
 }
 
 resource "aws_route" "public_route" {
-  #from igw to 0.0.0.0/0
   route_table_id         = aws_route_table.public_rt.id
   gateway_id             = aws_internet_gateway.igw.id
   destination_cidr_block = "0.0.0.0/0"
@@ -63,7 +59,7 @@ resource "aws_route" "public_route" {
 
 resource "aws_route_table_association" "public_rta" {
   count = 2
-  #hard-coded value for now
+
   route_table_id = aws_route_table.public_rt.id
   subnet_id      = aws_subnet.public_subnet[count.index].id
 }
