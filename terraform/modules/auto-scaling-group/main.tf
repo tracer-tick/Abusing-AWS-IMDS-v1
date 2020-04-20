@@ -7,7 +7,8 @@ resource "aws_autoscaling_group" "asg" {
   wait_for_elb_capacity = 1
   vpc_zone_identifier   = var.public_subnet_ids
   target_group_arns     = [var.alb_tg_arn]
-  enabled_metrics = ["GroupDesiredCapacity",
+  enabled_metrics = [
+    "GroupDesiredCapacity",
     "GroupInServiceCapacity",
     "GroupPendingCapacity",
     "GroupMinSize",
@@ -42,7 +43,7 @@ resource "aws_launch_configuration" "as_conf" {
 
 # Instance Profile
 resource "aws_iam_role" "s3_read_only_and_cwl" {
-  name               = "s3_read_only"
+  name               = "s3-read-only-and-cwl"
   assume_role_policy = <<EOF
 {
     "Version": "2012-10-17",

@@ -1,7 +1,8 @@
 
 variable "log-groups" {
   type = list(string)
-  default = ["/var/log/messages",
+  default = [
+    "/var/log/messages",
     "/var/log/httpd/access_log",
     "/var/log/httpd/error_log",
     "/var/log/httpd/ssl_access_log",
