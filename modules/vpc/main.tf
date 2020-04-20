@@ -4,12 +4,12 @@
 
 # Resources #
 resource "aws_vpc" "vpc" {
-  cidr_block           = var.vpc_cidr_block
+  cidr_block           = var.cidr_block
   enable_dns_hostnames = true
   enable_dns_support   = true
 
   tags = {
-    name = var.vpc_name,
+    Name = var.name,
   }
 }
 
@@ -17,13 +17,13 @@ resource "aws_subnet" "public_subnet" {
   count = 2
 
   vpc_id                  = aws_vpc.vpc.id
-  cidr_block              = cidrsubnet(var.vpc_cidr_block, 8, count.index)
+  cidr_block              = cidrsubnet(var.cidr_block, 8, count.index)
   map_public_ip_on_launch = true
   availability_zone       = data.aws_availability_zones.az.names[count.index]
 
   tags = {
-    name = "public-subnet-${count.index + 1}",
-    vpc  = var.vpc_name,
+    Name = "public-subnet-${count.index + 1}",
+    vpc  = var.name,
   }
 }
 
@@ -31,8 +31,8 @@ resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.vpc.id
 
   tags = {
-    name = "igw",
-    vpc  = var.vpc_name,
+    Name = "igw",
+    vpc  = var.name,
   }
 }
 
@@ -41,8 +41,8 @@ resource "aws_route_table" "public_rt" {
   vpc_id = aws_vpc.vpc.id
 
   tags = {
-    name = "public-route-table",
-    vpc  = var.vpc_name,
+    Name = "public-route-table",
+    vpc  = var.name,
   }
 }
 

@@ -1,10 +1,10 @@
 resource "aws_security_group" "web_server_access" {
-  name        = var.security_group_name
+  name        = var.name
   description = "Inbound: HTTP and HTTPS inboud from ${join(", ", var.locked-down-ip-addresses)}. Outbound: any to all"
   vpc_id      = var.vpc_id
 
   tags = {
-    name = var.security_group_name,
+    Name = var.name,
     vpc  = var.vpc_id,
   }
 }

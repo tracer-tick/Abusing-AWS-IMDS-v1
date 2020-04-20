@@ -16,27 +16,37 @@ variable "region" {
 }
 
 #####################################
-# Data
-#####################################
-
-data "aws_availability_zones" "az" {}
-
-#########terr############################
 # Modules
 #####################################
 
 module "create-vpc" {
-  # realize there's a module to do this on TF registry but want to write my own
-  source         = ".//modules//vpc"
-  vpc_name       = "imds-custom-vpc"
-  vpc_cidr_block = "192.168.0.0/16"
+  source     = ".//modules//vpc"
+  name       = "imds-v1-custom-vpc"
+  cidr_block = "192.168.0.0/16"
 }
 
 module "create-security-group" {
-  # realize there's a module to do this on TF registry but want to write my own
-  source              = ".//modules//security-group"
-  security_group_name = "public-web-app"
-  locked-down-ip-addresses = [
-  "99.44.98.252/32"]
-  vpc_id = module.create-vpc.vpc.id
+  source = ".//modules//security-group"
+  name   = "public-web-app"
+  vpc_id = module.create-vpc.vpc-id
+  locked-down-ip-addresses = [ #update this value
+    "99.44.98.252/32",
+  ]
+}
+
+module "create-vulnerable-web-app" {
+  source            = ".//modules//vulnerable-web-app"
+  name              = "vulnerable-web-app"
+  instance_type     = "t2.micro"
+  public_subnet_id  = module.create-vpc.public-subnet-1-id
+  security_group_id = module.create-security-group.web-security-group-id
+  vpc_id            = module.create-vpc.vpc-id
+}
+
+#####################################
+# Outputs
+#####################################
+
+output "ec2_public_dns" {
+  value = module.create-vulnerable-web-app.public_dns
 }
