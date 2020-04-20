@@ -31,3 +31,12 @@ module "create-vpc" {
   vpc_name       = "imds-custom-vpc"
   vpc_cidr_block = "192.168.0.0/16"
 }
+
+module "create-security-group" {
+  # realize there's a module to do this on TF registry but want to write my own
+  source              = ".//modules//security-group"
+  security_group_name = "public-web-app"
+  locked-down-ip-addresses = [
+  "99.44.98.252/32"]
+  vpc_id = module.create-vpc.vpc.id
+}
