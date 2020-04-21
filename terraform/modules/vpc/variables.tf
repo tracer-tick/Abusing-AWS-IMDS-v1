@@ -1,13 +1,27 @@
 data "aws_availability_zones" "az" {}
 
-variable "name" {
+variable "aws_internet_gateway_name" {
   type        = string
-  default     = "abusing-IMDS-v1"
-  description = "The name of the VPC"
+  description = "The name of the internet gateway"
 }
 
-variable "cidr_block" {
+variable "aws_route_table_public_name" {
   type        = string
-  default     = "10.0.0.0/16"
+  description = "The name of the public route table"
+}
+
+variable "num_public_subnets" {
+  type        = number
+  default     = 2
+  description = "The number of public subnets to be created in the VPC"
+}
+
+variable "vpc_cidr_block" {
+  type        = string
   description = "The CIDR block for the VPC"
+}
+
+variable "vpc_name" {
+  type        = string
+  description = "The name of the VPC"
 }
