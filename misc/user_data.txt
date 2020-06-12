@@ -1,0 +1,9 @@
+#!/bin/bash -xe
+yum update -y
+yum install awslogs -y
+wget https://raw.githubusercontent.com/tracer-tick/Abusing-AWS-IMDS-v1/master/misc/awslogs.conf
+rm -f /etc/awslogs/awslogs.conf
+mv awslogs.conf /etc/awslogs/
+systemctl start awslogsd
+systemctl enable awslogsd.service
+chkconfig awslogsd on
